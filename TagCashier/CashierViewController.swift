@@ -11,6 +11,7 @@ import CoreNFC
 import Firebase
 
 // Globals
+let ref = Database.database().reference()
 
 // Variables
 var receipts = [Receipt]()
@@ -22,8 +23,6 @@ let documentDirectory = FileManager.default.urls(for: FileManager.SearchPathDire
 let saveFileURL = documentDirectory.appendingPathComponent("receipts.json")
 
 class CashierViewController: UIViewController {
-    
-    let ref = Database.database().reference()
     
     @IBOutlet weak var Header: UIView!
     @IBOutlet weak var ReceiptCollectionView: UICollectionView!
@@ -49,11 +48,23 @@ class CashierViewController: UIViewController {
         }
     }
     
-    @IBAction func unwindAfterSigningIn(segue: UIStoryboardSegue) {
-        if let uID = Auth.auth().currentUser?.uid {
-            updateReceiptData(userID: uID) { (result) in
-                self.ReceiptCollectionView.reloadData()
+    @IBAction func clickedAddItem(_ sender: Any) {
+        Auth.auth().currentUser?.getIDTokenResult(completion: { (result, error) in
+            if let isCashier = result?.claims["cashier"] as? Bool {
+                if isCashier {
+                    self.presentAddMenu()
+                } else {
+                    self.presentSimpleAlert(title: "Invalid account", message: "Please sign in with your company cashier account. Thank you.", btnMsg: "Continue")
+                }
             }
+        })
+    }
+    
+    @IBAction func unwindAfterSigningIn(segue: UIStoryboardSegue) {
+        if Auth.auth().currentUser == nil {
+            self.performSegue(withIdentifier: "presentAuth", sender: self)
+        } else {
+            // TODO: set receipt title to store name
         }
     }
     
@@ -65,15 +76,16 @@ class CashierViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
-        
+        // UI Init
         Header.dropShadow(radius: 5, widthOffset: 0, heightOffset: 1)
         ProfileButtonContainer.dropShadow(radius: 2, widthOffset: 1, heightOffset: 1)
+        AddItemContainer.dropShadow(radius: 2, widthOffset: 1, heightOffset: 1)
         
         AddItemContainer.layer.cornerRadius = 24
         ProfileButtonContainer.layer.cornerRadius = 24
         
+        // Other Init
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillShow),
@@ -81,23 +93,11 @@ class CashierViewController: UIViewController {
             object: nil
         )
         
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-        
-        ReceiptCollectionView.refreshControl = refreshControl
         ReceiptCollectionView.dataSource = self
         ReceiptCollectionView.delegate = self
         
         receipts = loadReceiptData()
         self.ReceiptCollectionView.reloadData()
-        
-        if let uID = Auth.auth().currentUser?.uid {
-            updateReceiptData(userID: uID, completion: {result in
-                if result == true {
-                    self.ReceiptCollectionView.reloadData()
-                }
-            })
-        }
         
     }
     
@@ -106,6 +106,10 @@ class CashierViewController: UIViewController {
             let keyboardRectangle = keyboardFrame.cgRectValue
             keyboardHeight = keyboardRectangle.height
         }
+    }
+    
+    func presentAddMenu() {
+        //TODO: Insert Item Add
     }
     
     func askUserToLogOut() {
@@ -127,67 +131,13 @@ class CashierViewController: UIViewController {
     
     func askUserToSignIn() {
         
-        let alert = UIAlertController(title: "Not Signed In", message: "Sign into the app so we can start tracking your receipts!", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Not Signed In", message: "Please sign in to enable cashier privileges", preferredStyle: .alert)
         alert.addAction(.init(title: "Continue", style: .cancel, handler: { (alert) in
             self.ReceiptCollectionView.refreshControl?.endRefreshing()
             self.performSegue(withIdentifier: "presentAuth", sender: self)
         }))
         self.present(alert, animated: true, completion: nil)
         
-    }
-    
-    @objc func handleRefresh() {
-        if let uID = Auth.auth().currentUser?.uid {
-            updateReceiptData(userID: uID, completion: { result in
-                if result == true {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        self.ReceiptCollectionView.refreshControl?.endRefreshing()
-                    }
-                }
-            })
-        } else {
-            askUserToSignIn()
-        }
-    }
-    
-    func updateReceiptData(userID: String, completion: ((Bool) -> ())) {
-        var newReceipts = [Receipt]()
-        
-        ref.child("users").child(userID).child("receipts").observeSingleEvent(of: .value, with: { (snapshot) in
-            // Get value of receipt
-            let receiptArray:NSArray = snapshot.children.allObjects as NSArray
-            for receipt in receiptArray {
-                let snap = receipt as! DataSnapshot
-                let receiptDetails = snap.value as! [String:Any]
-                
-                var receiptItems = [Receipt.ReceiptItem]()
-                
-                for (_, value) in receiptDetails["items"] as! NSDictionary {
-                    if let itmDict = value as? NSDictionary {
-                        let receiptItem = Receipt.ReceiptItem(
-                            Name: itmDict["name"] as! String,
-                            Qty: itmDict["quantity"] as! Int,
-                            SubTotal: itmDict["price"] as! Double)
-                        receiptItems.append(receiptItem)
-                    }
-                }
-                
-                let r = Receipt(
-                    StoreName: receiptDetails["store"] as! String,
-                    GrandTotal: receiptDetails["total"] as! Double,
-                    Items: receiptItems)
-                
-                newReceipts.append(r)
-            }
-            
-            receipts = newReceipts
-            self.saveReceiptData()
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-        
-        completion(true)
     }
     
     func saveReceiptData() {

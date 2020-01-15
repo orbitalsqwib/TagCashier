@@ -30,7 +30,15 @@ class AuthViewController: UIViewController {
                 Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
                     if error == nil {
                         // No error, proceed
-                        self.dismiss(animated: true, completion: nil)
+                        Auth.auth().currentUser?.getIDTokenResult(completion: { (result, error) in
+                            if let isCashier = result?.claims["cashier"] as? Bool {
+                                if isCashier {
+                                    self.dismiss(animated: true, completion: nil)
+                                } else {
+                                    self.presentSimpleAlert(title: "Invalid account", message: "Please sign in with your company cashier account. Thank you.", btnMsg: "Continue")
+                                }
+                            }
+                        })
                     } else {
                         if let errorCode = error?._code {
                             if let authError = AuthErrorCode(rawValue: errorCode) {
@@ -87,7 +95,7 @@ class AuthViewController: UIViewController {
         LoginContainer.layer.cornerRadius = 10
         SignupContainer.layer.cornerRadius = 10
         
-        GradientView.addGradientBackground(firstColor: .systemPink, secondColor: .white, width: Double(GradientView.bounds.width), height: Double(GradientView.bounds.height))
+        GradientView.addGradientBackground(firstColor: .systemGreen, secondColor: .white, width: Double(GradientView.bounds.width), height: Double(GradientView.bounds.height))
 
         // Do any additional setup after loading the view.
         
