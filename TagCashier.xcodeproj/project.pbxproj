@@ -3,27 +3,39 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1173C4193A5E59687039B026 /* Pods_TagCashier.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9BC41FD88D58920FC132181 /* Pods_TagCashier.framework */; };
 		1C809AD023CEB667003B9FDC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C809ACF23CEB667003B9FDC /* AppDelegate.swift */; };
 		1C809AD223CEB667003B9FDC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C809AD123CEB667003B9FDC /* SceneDelegate.swift */; };
-		1C809AD423CEB667003B9FDC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C809AD323CEB667003B9FDC /* ViewController.swift */; };
 		1C809AD723CEB667003B9FDC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C809AD523CEB667003B9FDC /* Main.storyboard */; };
 		1C809AD923CEB66A003B9FDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1C809AD823CEB66A003B9FDC /* Assets.xcassets */; };
 		1C809ADC23CEB66A003B9FDC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C809ADA23CEB66A003B9FDC /* LaunchScreen.storyboard */; };
+		1C809AE423CEBA67003B9FDC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1C809AE323CEBA67003B9FDC /* GoogleService-Info.plist */; };
+		1C809AE623CEBB5C003B9FDC /* CashierViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C809AE523CEBB5C003B9FDC /* CashierViewController.swift */; };
+		1C809AE823CEC038003B9FDC /* Classes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C809AE723CEC038003B9FDC /* Classes.swift */; };
+		1C809AEA23CEC050003B9FDC /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C809AE923CEC050003B9FDC /* Extensions.swift */; };
+		1C809AEC23CEC1BB003B9FDC /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C809AEB23CEC1BB003B9FDC /* AuthViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0BFEDE6C3A0A1CF3B881CCB8 /* Pods-TagCashier.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagCashier.debug.xcconfig"; path = "Target Support Files/Pods-TagCashier/Pods-TagCashier.debug.xcconfig"; sourceTree = "<group>"; };
 		1C809ACC23CEB667003B9FDC /* TagCashier.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TagCashier.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C809ACF23CEB667003B9FDC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1C809AD123CEB667003B9FDC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		1C809AD323CEB667003B9FDC /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		1C809AD623CEB667003B9FDC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1C809AD823CEB66A003B9FDC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1C809ADB23CEB66A003B9FDC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1C809ADD23CEB66A003B9FDC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1C809AE323CEBA67003B9FDC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		1C809AE523CEBB5C003B9FDC /* CashierViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashierViewController.swift; sourceTree = "<group>"; };
+		1C809AE723CEC038003B9FDC /* Classes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classes.swift; sourceTree = "<group>"; };
+		1C809AE923CEC050003B9FDC /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		1C809AEB23CEC1BB003B9FDC /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		65095AC59F1FBAE5DF1136E3 /* Pods-TagCashier.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagCashier.release.xcconfig"; path = "Target Support Files/Pods-TagCashier/Pods-TagCashier.release.xcconfig"; sourceTree = "<group>"; };
+		D9BC41FD88D58920FC132181 /* Pods_TagCashier.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TagCashier.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1173C4193A5E59687039B026 /* Pods_TagCashier.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +55,8 @@
 			children = (
 				1C809ACE23CEB667003B9FDC /* TagCashier */,
 				1C809ACD23CEB667003B9FDC /* Products */,
+				9EA6B967C8696FF7F4A058CD /* Pods */,
+				39277896549E1A68A3C604C4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,13 +73,34 @@
 			children = (
 				1C809ACF23CEB667003B9FDC /* AppDelegate.swift */,
 				1C809AD123CEB667003B9FDC /* SceneDelegate.swift */,
-				1C809AD323CEB667003B9FDC /* ViewController.swift */,
+				1C809AEB23CEC1BB003B9FDC /* AuthViewController.swift */,
+				1C809AE523CEBB5C003B9FDC /* CashierViewController.swift */,
+				1C809AE723CEC038003B9FDC /* Classes.swift */,
+				1C809AE923CEC050003B9FDC /* Extensions.swift */,
 				1C809AD523CEB667003B9FDC /* Main.storyboard */,
 				1C809AD823CEB66A003B9FDC /* Assets.xcassets */,
 				1C809ADA23CEB66A003B9FDC /* LaunchScreen.storyboard */,
+				1C809AE323CEBA67003B9FDC /* GoogleService-Info.plist */,
 				1C809ADD23CEB66A003B9FDC /* Info.plist */,
 			);
 			path = TagCashier;
+			sourceTree = "<group>";
+		};
+		39277896549E1A68A3C604C4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D9BC41FD88D58920FC132181 /* Pods_TagCashier.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9EA6B967C8696FF7F4A058CD /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				0BFEDE6C3A0A1CF3B881CCB8 /* Pods-TagCashier.debug.xcconfig */,
+				65095AC59F1FBAE5DF1136E3 /* Pods-TagCashier.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +110,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1C809AE023CEB66A003B9FDC /* Build configuration list for PBXNativeTarget "TagCashier" */;
 			buildPhases = (
+				1DE77579CCB8512387222E0C /* [CP] Check Pods Manifest.lock */,
 				1C809AC823CEB667003B9FDC /* Sources */,
 				1C809AC923CEB667003B9FDC /* Frameworks */,
 				1C809ACA23CEB667003B9FDC /* Resources */,
+				24BCA6EE9EFCC0EFDA6678F9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -126,6 +164,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C809ADC23CEB66A003B9FDC /* LaunchScreen.storyboard in Resources */,
+				1C809AE423CEBA67003B9FDC /* GoogleService-Info.plist in Resources */,
 				1C809AD923CEB66A003B9FDC /* Assets.xcassets in Resources */,
 				1C809AD723CEB667003B9FDC /* Main.storyboard in Resources */,
 			);
@@ -133,14 +172,59 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1DE77579CCB8512387222E0C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TagCashier-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		24BCA6EE9EFCC0EFDA6678F9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TagCashier/Pods-TagCashier-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TagCashier/Pods-TagCashier-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TagCashier/Pods-TagCashier-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1C809AC823CEB667003B9FDC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1C809AD423CEB667003B9FDC /* ViewController.swift in Sources */,
+				1C809AEA23CEC050003B9FDC /* Extensions.swift in Sources */,
 				1C809AD023CEB667003B9FDC /* AppDelegate.swift in Sources */,
 				1C809AD223CEB667003B9FDC /* SceneDelegate.swift in Sources */,
+				1C809AE823CEC038003B9FDC /* Classes.swift in Sources */,
+				1C809AEC23CEC1BB003B9FDC /* AuthViewController.swift in Sources */,
+				1C809AE623CEBB5C003B9FDC /* CashierViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +366,7 @@
 		};
 		1C809AE123CEB66A003B9FDC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0BFEDE6C3A0A1CF3B881CCB8 /* Pods-TagCashier.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -300,6 +385,7 @@
 		};
 		1C809AE223CEB66A003B9FDC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 65095AC59F1FBAE5DF1136E3 /* Pods-TagCashier.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
