@@ -11,7 +11,7 @@
         <!--Cashier View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="CashierViewController" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="CashierViewController" customModule="TagCashier" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -42,7 +42,7 @@
                                                     </preferredSymbolConfiguration>
                                                 </state>
                                                 <connections>
-                                                    <action selector="clickedAddItem:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Xze-95-o7I"/>
+                                                    <action selector="clickedAddItem:" destination="BYZ-38-t0r" eventType="touchUpInside" id="wx9-hL-Gyx"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -318,14 +318,17 @@
                                     <constraint firstItem="dQK-KU-t8l" firstAttribute="centerX" secondItem="XHs-fi-tg2" secondAttribute="centerX" id="ckZ-2Q-Ohs"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DSl-XX-Ifu" userLabel="buttonContainer">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DSl-XX-Ifu" userLabel="ScanButtonContainer">
                                 <rect key="frame" x="25" y="782" width="364" height="60"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LQ-gX-J7X">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8LQ-gX-J7X" userLabel="ScanButton">
                                         <rect key="frame" x="0.0" y="0.0" width="364" height="60"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="20"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <state key="normal" title="Push To Tag"/>
+                                        <state key="normal" title="Scan Tag"/>
+                                        <connections>
+                                            <action selector="clickedScan:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zyU-Wl-ZhX"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -356,12 +359,14 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="AddItemButton" destination="odz-Mc-6uJ" id="KqC-oI-zVy"/>
+                        <outlet property="AddItemButton" destination="odz-Mc-6uJ" id="XuA-Xt-LAM"/>
                         <outlet property="AddItemContainer" destination="4AE-3F-oZF" id="ocO-pd-ssH"/>
                         <outlet property="Header" destination="AKt-T3-aaT" id="FfI-yz-B6f"/>
                         <outlet property="ProfileButton" destination="5Id-hg-XtB" id="xsy-5e-eie"/>
                         <outlet property="ProfileButtonContainer" destination="AzF-TR-3lR" id="5ya-cU-Yus"/>
                         <outlet property="ReceiptCollectionView" destination="DWP-qH-g9p" id="v31-jF-4gJ"/>
+                        <outlet property="ScanButton" destination="8LQ-gX-J7X" id="oRL-13-5fr"/>
+                        <outlet property="ScanButtonContainer" destination="DSl-XX-Ifu" id="m2q-Vg-kyr"/>
                         <segue destination="rU5-Fn-HeF" kind="show" identifier="presentAuth" id="kXm-oJ-GfG"/>
                     </connections>
                 </viewController>
@@ -404,7 +409,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AI8-st-s80" userLabel="loginContainer">
-                                        <rect key="frame" x="20" y="291" width="334" height="50"/>
+                                        <rect key="frame" x="20" y="346" width="334" height="50"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5XK-n7-ccH">
                                                 <rect key="frame" x="0.0" y="0.0" width="334" height="50"/>
@@ -424,29 +429,6 @@
                                             <constraint firstAttribute="height" constant="50" id="FbM-dK-VBt"/>
                                             <constraint firstAttribute="bottom" secondItem="5XK-n7-ccH" secondAttribute="bottom" id="H9J-0S-rKg"/>
                                             <constraint firstAttribute="trailing" secondItem="5XK-n7-ccH" secondAttribute="trailing" id="P9R-U2-T4j"/>
-                                        </constraints>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Agz-ff-DFo" userLabel="signupContainer">
-                                        <rect key="frame" x="20" y="351" width="334" height="50"/>
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mdy-LR-Aqr">
-                                                <rect key="frame" x="0.0" y="0.0" width="334" height="50"/>
-                                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
-                                                <state key="normal" title="sign up">
-                                                    <color key="titleColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="pressedSignUp:" destination="rU5-Fn-HeF" eventType="touchUpInside" id="SN0-4p-XA6"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="5P1-KT-Qus"/>
-                                            <constraint firstItem="mdy-LR-Aqr" firstAttribute="leading" secondItem="Agz-ff-DFo" secondAttribute="leading" id="YRA-d4-Lkn"/>
-                                            <constraint firstItem="mdy-LR-Aqr" firstAttribute="top" secondItem="Agz-ff-DFo" secondAttribute="top" id="icT-FO-Xxt"/>
-                                            <constraint firstAttribute="trailing" secondItem="mdy-LR-Aqr" secondAttribute="trailing" id="ppD-6M-Bgh"/>
-                                            <constraint firstAttribute="bottom" secondItem="mdy-LR-Aqr" secondAttribute="bottom" id="vri-7d-Fx3"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jai-FF-4F9" userLabel="emailContainer">
@@ -492,13 +474,10 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
-                                    <constraint firstItem="Agz-ff-DFo" firstAttribute="top" secondItem="AI8-st-s80" secondAttribute="bottom" constant="10" id="33r-p1-dXz"/>
                                     <constraint firstItem="jai-FF-4F9" firstAttribute="top" secondItem="ud9-2n-o70" secondAttribute="bottom" constant="20" id="3sR-GZ-d6P"/>
-                                    <constraint firstAttribute="bottom" secondItem="Agz-ff-DFo" secondAttribute="bottom" constant="15" id="746-3U-SOr"/>
+                                    <constraint firstAttribute="bottom" secondItem="AI8-st-s80" secondAttribute="bottom" constant="20" id="And-Fj-D5c"/>
                                     <constraint firstItem="ENS-CJ-aMe" firstAttribute="top" secondItem="jai-FF-4F9" secondAttribute="bottom" constant="10" id="OVf-LL-W5k"/>
-                                    <constraint firstAttribute="trailing" secondItem="Agz-ff-DFo" secondAttribute="trailing" constant="20" id="QIi-GG-ABY"/>
                                     <constraint firstAttribute="trailing" secondItem="AI8-st-s80" secondAttribute="trailing" constant="20" id="Tmh-vR-R7b"/>
-                                    <constraint firstItem="Agz-ff-DFo" firstAttribute="leading" secondItem="bbD-H4-ALd" secondAttribute="leading" constant="20" id="Xcb-0J-btd"/>
                                     <constraint firstItem="ud9-2n-o70" firstAttribute="top" secondItem="bbD-H4-ALd" secondAttribute="top" id="cPL-05-xL5"/>
                                     <constraint firstItem="jai-FF-4F9" firstAttribute="leading" secondItem="bbD-H4-ALd" secondAttribute="leading" constant="20" id="g7e-hb-mZu"/>
                                     <constraint firstAttribute="width" secondItem="bbD-H4-ALd" secondAttribute="height" multiplier="9:10" id="hJ6-QY-edV"/>
@@ -536,7 +515,6 @@
                         <outlet property="LoginContainer" destination="AI8-st-s80" id="Hft-BS-8HI"/>
                         <outlet property="PasswordTextField" destination="06d-IZ-fQJ" id="ug8-Zw-v4j"/>
                         <outlet property="SignInHeader" destination="ud9-2n-o70" id="V4L-lU-Rxn"/>
-                        <outlet property="SignupContainer" destination="Agz-ff-DFo" id="EaJ-wK-L9f"/>
                         <segue destination="ASU-AC-14h" kind="unwind" identifier="signIn" unwindAction="unwindAfterSigningInSegue:" id="lzn-ft-NrU"/>
                     </connections>
                 </viewController>

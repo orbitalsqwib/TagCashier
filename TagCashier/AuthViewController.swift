@@ -16,7 +16,6 @@ class AuthViewController: UIViewController {
     @IBOutlet weak var EmailTextField: UITextField!
     @IBOutlet weak var PasswordTextField: UITextField!
     @IBOutlet weak var LoginContainer: UIView!
-    @IBOutlet weak var SignupContainer: UIView!
     
     @IBOutlet weak var GradientView: UIView!
     @IBAction func tappedOut(_ sender: Any) {
@@ -31,12 +30,14 @@ class AuthViewController: UIViewController {
                     if error == nil {
                         // No error, proceed
                         Auth.auth().currentUser?.getIDTokenResult(completion: { (result, error) in
-                            if let isCashier = result?.claims["cashier"] as? Bool {
-                                if isCashier {
+                            if let role = result?.claims["role"] as? String {
+                                if role == "cashier" {
                                     self.dismiss(animated: true, completion: nil)
                                 } else {
-                                    self.presentSimpleAlert(title: "Invalid account", message: "Please sign in with your company cashier account. Thank you.", btnMsg: "Continue")
+                                    self.rejectLogInAttempt()
                                 }
+                            } else {
+                                self.rejectLogInAttempt()
                             }
                         })
                     } else {
@@ -55,30 +56,6 @@ class AuthViewController: UIViewController {
         }
         
     }
-    @IBAction func pressedSignUp(_ sender: Any) {
-        if let email = EmailTextField.text {
-            if let password = PasswordTextField.text {
-                Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
-                    if error == nil {
-                        // No error, proceed
-                        let alert = UIAlertController(title: "Sign up successful!", message: "Your account has been created and is ready for use! :D", preferredStyle: .alert)
-                        alert.addAction(.init(title: "Let's go!", style: .cancel, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                    } else {
-                        if let errorCode = error?._code {
-                            if let authError = AuthErrorCode(rawValue: errorCode) {
-                                self.handleAuthError(error: authError)
-                            }
-                        }
-                    }
-                }
-            } else {
-                // No password!
-            }
-        } else {
-            // No email
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,17 +65,20 @@ class AuthViewController: UIViewController {
         EmailTextField.dropShadow(radius: 3, widthOffset: 0, heightOffset: 0)
         PasswordTextField.dropShadow(radius: 3, widthOffset: 0, heightOffset: 0)
         LoginContainer.dropShadow(radius: 3, widthOffset: 0, heightOffset: 0)
-        SignupContainer.dropShadow(radius: 3, widthOffset: 0, heightOffset: 0)
         
         SignInHeader.layer.cornerRadius = 10
         ContainerView.layer.cornerRadius = 10
         LoginContainer.layer.cornerRadius = 10
-        SignupContainer.layer.cornerRadius = 10
         
         GradientView.addGradientBackground(firstColor: .systemGreen, secondColor: .white, width: Double(GradientView.bounds.width), height: Double(GradientView.bounds.height))
 
         // Do any additional setup after loading the view.
         
+    }
+    
+    func rejectLogInAttempt() {
+        self.presentSimpleAlert(title: "Invalid account", message: "Please sign in with your company cashier account. Thank you.", btnMsg: "Continue")
+        self.signOut()
     }
     
     func handleAuthError(error: AuthErrorCode) {

@@ -19,8 +19,6 @@ var keyboardHeight:CGFloat = 0
 
 // Constants
 let rowHeight = CGFloat(33)
-let documentDirectory = FileManager.default.urls(for: FileManager.SearchPathDirectory.cachesDirectory, in: FileManager.SearchPathDomainMask.userDomainMask).first!
-let saveFileURL = documentDirectory.appendingPathComponent("receipts.json")
 
 class CashierViewController: UIViewController {
     
@@ -30,6 +28,10 @@ class CashierViewController: UIViewController {
     @IBOutlet weak var AddItemButton: UIButton!
     @IBOutlet weak var ProfileButtonContainer: UIView!
     @IBOutlet weak var ProfileButton: UIButton!
+    @IBOutlet weak var ScanButtonContainer: UIView!
+    @IBOutlet weak var ScanButton: UIButton!
+    
+    // Mark : IBActions
     
     @IBAction func clickedProfile(_ sender: Any) {
         //Show alert to sign out/rebind/bind card?
@@ -50,8 +52,8 @@ class CashierViewController: UIViewController {
     
     @IBAction func clickedAddItem(_ sender: Any) {
         Auth.auth().currentUser?.getIDTokenResult(completion: { (result, error) in
-            if let isCashier = result?.claims["cashier"] as? Bool {
-                if isCashier {
+            if let role = result?.claims["role"] as? String {
+                if role == "cashier" {
                     self.presentAddMenu()
                 } else {
                     self.presentSimpleAlert(title: "Invalid account", message: "Please sign in with your company cashier account. Thank you.", btnMsg: "Continue")
@@ -60,13 +62,19 @@ class CashierViewController: UIViewController {
         })
     }
     
+    @IBAction func clickedScan(_ sender: Any) {
+    }
+    
     @IBAction func unwindAfterSigningIn(segue: UIStoryboardSegue) {
         if Auth.auth().currentUser == nil {
             self.performSegue(withIdentifier: "presentAuth", sender: self)
         } else {
             // TODO: set receipt title to store name
         }
+        
     }
+    
+    // Mark : View State Functions
     
     override func viewDidAppear(_ animated: Bool) {
         if Auth.auth().currentUser == nil {
@@ -81,53 +89,23 @@ class CashierViewController: UIViewController {
         Header.dropShadow(radius: 5, widthOffset: 0, heightOffset: 1)
         ProfileButtonContainer.dropShadow(radius: 2, widthOffset: 1, heightOffset: 1)
         AddItemContainer.dropShadow(radius: 2, widthOffset: 1, heightOffset: 1)
+        ScanButton.dropShadow(radius: 5, widthOffset: 0, heightOffset: 1)
         
         AddItemContainer.layer.cornerRadius = 24
         ProfileButtonContainer.layer.cornerRadius = 24
+        ScanButtonContainer.layer.cornerRadius = 10
         
         // Other Init
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
-        
         ReceiptCollectionView.dataSource = self
         ReceiptCollectionView.delegate = self
         
-        receipts = loadReceiptData()
-        self.ReceiptCollectionView.reloadData()
-        
-    }
-    
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            keyboardHeight = keyboardRectangle.height
-        }
     }
     
     func presentAddMenu() {
         //TODO: Insert Item Add
     }
     
-    func askUserToLogOut() {
-        let alert = UIAlertController(title: "Log Out", message: "Are you sure you want to log out?", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (result) in
-            
-            // Sign out
-            do {
-                try Auth.auth().signOut()
-            } catch let signOutError as NSError {
-                print(signOutError)
-            }
-            self.performSegue(withIdentifier: "presentAuth", sender: self)
-            
-        }))
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-    }
+    // Mark : Auth Functions
     
     func askUserToSignIn() {
         
@@ -140,33 +118,22 @@ class CashierViewController: UIViewController {
         
     }
     
-    func saveReceiptData() {
-        let encoder = JSONEncoder()
-        if let data = try? encoder.encode(receipts) {
-            do {
-                if FileManager.default.fileExists(atPath: saveFileURL.path) {
-                    try FileManager.default.removeItem(at: saveFileURL)
-                }
-                FileManager.default.createFile(atPath: saveFileURL.path, contents: data, attributes: nil)
-            } catch {
-                fatalError(error.localizedDescription)
-            }
-        }
-    }
-    
-    func loadReceiptData() -> [Receipt] {
-        let decoder = JSONDecoder()
-        if let retrieved = try? Data(contentsOf: saveFileURL) {
-            do {
-                return try decoder.decode([Receipt].self, from: retrieved)
-            } catch {
-                return [Receipt]()
-            }
-        }
-        return [Receipt]()
+    func askUserToLogOut() {
+        let alert = UIAlertController(title: "Log Out", message: "Are you sure you want to log out?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (result) in
+            
+            // Sign out
+            self.signOut()
+            self.performSegue(withIdentifier: "presentAuth", sender: self)
+            
+        }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
 }
+
+// Mark : Cell Classes
 
 class ReceiptCollectionViewCell: UICollectionViewCell {
     
@@ -185,6 +152,8 @@ class ReceiptItemTableViewCell: UITableViewCell {
     @IBOutlet weak var ItemPriceLabel: UILabel!
     
 }
+
+// Mark : CashierViewController Extensions
 
 extension CashierViewController: UICollectionViewDataSource {
     
