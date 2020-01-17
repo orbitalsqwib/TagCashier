@@ -16,6 +16,7 @@ import Firebase
 var receipts = [Receipt]()
 var keyboardHeight:CGFloat = 0
 var storeName = ""
+var total:Double = 0
 var receiptItems = [Receipt.ReceiptItem]()
 
 // Constants
@@ -126,11 +127,12 @@ class CashierViewController: UIViewController {
     
     func reloadPreview() {
         receipts.removeAll()
-        var total:Double = 0
+        var totalPrice:Double = 0
         for item in receiptItems {
-            total += item.ItemSubTotal
+            totalPrice += item.ItemSubTotal
         }
-        total = round(total*100)/100
+        totalPrice = round(total*100)/100
+        total = totalPrice
         receipts.append(Receipt(StoreName: storeName, GrandTotal: total, Items: receiptItems))
         ReceiptCollectionView.reloadData()
     }
@@ -365,8 +367,19 @@ extension CashierViewController: NFCNDEFReaderSessionDelegate {
                             let records = message!.records
                             let receiptData = records.first?.payload ?? Data()
                             
-                            print(receiptData)
                             // Should give me UID of user stored on card
+                            let uid = String(decoding: receiptData, as: UTF8.self)
+                            if uid != "" {
+                                let receiptRef = ref.child("users/"+uid).childByAutoId()
+                                receiptRef.updateChildValues(["store": storeName])
+                                receiptRef.updateChildValues(["total": total])
+                                for item in receiptItems {
+                                    let itemRef = receiptRef.child("items").childByAutoId()
+                                    itemRef.updateChildValues(["name" : item.ItemName])
+                                    itemRef.updateChildValues(["quantity" : item.ItemQty])
+                                    itemRef.updateChildValues(["price" : item.ItemSubTotal])
+                                }
+                            }
                         }
                     }
                 }
