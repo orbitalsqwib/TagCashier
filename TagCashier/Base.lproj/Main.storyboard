@@ -114,7 +114,7 @@
                                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         </collectionViewFlowLayout>
                                         <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="receiptCell" id="vb0-Fy-54z" customClass="ReceiptCollectionViewCell" customModule="Tag" customModuleProvider="target">
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="receiptCell" id="vb0-Fy-54z" customClass="ReceiptCollectionViewCell" customModule="TagCashier" customModuleProvider="target">
                                                 <rect key="frame" x="31" y="0.0" width="352" height="315"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="M7L-9I-fMK">
@@ -126,6 +126,9 @@
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="StoreName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IrB-ot-agd">
                                                                     <rect key="frame" x="123.5" y="15" width="89" height="24"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="24" id="DdW-Dz-HWl"/>
+                                                                    </constraints>
                                                                     <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -144,15 +147,15 @@
                                                                     <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                                     <prototypes>
-                                                                        <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="receiptItemCell" rowHeight="33" id="xdv-vQ-J5n" customClass="ReceiptItemTableViewCell" customModule="Tag" customModuleProvider="target">
+                                                                        <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="receiptItemCell" rowHeight="33" id="xdv-vQ-J5n" customClass="ReceiptItemTableViewCell" customModule="TagCashier" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="28" width="336" height="33"/>
                                                                             <autoresizingMask key="autoresizingMask"/>
                                                                             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xdv-vQ-J5n" id="ZHB-mL-AGC">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="336" height="33"/>
                                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                                 <subviews>
-                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ItemName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="pIr-vE-0HX">
-                                                                                        <rect key="frame" x="15" y="8" width="80.5" height="25"/>
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ItemName" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="pIr-vE-0HX">
+                                                                                        <rect key="frame" x="15" y="8" width="80.5" height="23"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="height" constant="25" id="1Bz-ea-NFu"/>
                                                                                         </constraints>
@@ -161,7 +164,7 @@
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ItmPrc" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h00-fB-WLj">
-                                                                                        <rect key="frame" x="241" y="8.5" width="80" height="24"/>
+                                                                                        <rect key="frame" x="241" y="7.5" width="80" height="24"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="cz0-zl-j9c"/>
                                                                                         </constraints>
@@ -170,7 +173,7 @@
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Qty" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="by5-AF-vhw">
-                                                                                        <rect key="frame" x="156" y="8.5" width="40" height="24"/>
+                                                                                        <rect key="frame" x="156" y="7.5" width="40" height="24"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="0CH-uz-KQM"/>
                                                                                         </constraints>
@@ -185,7 +188,7 @@
                                                                                     <constraint firstItem="pIr-vE-0HX" firstAttribute="top" secondItem="ZHB-mL-AGC" secondAttribute="top" constant="8" id="6WA-1g-9I4"/>
                                                                                     <constraint firstItem="h00-fB-WLj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="by5-AF-vhw" secondAttribute="trailing" constant="8" symbolic="YES" id="QvP-qX-hbb"/>
                                                                                     <constraint firstAttribute="trailing" secondItem="h00-fB-WLj" secondAttribute="trailing" constant="15" id="igX-Uo-9FK"/>
-                                                                                    <constraint firstAttribute="bottom" secondItem="pIr-vE-0HX" secondAttribute="bottom" id="inr-xb-MUo"/>
+                                                                                    <constraint firstAttribute="bottom" secondItem="pIr-vE-0HX" secondAttribute="bottom" constant="2" id="inr-xb-MUo"/>
                                                                                     <constraint firstItem="pIr-vE-0HX" firstAttribute="leading" secondItem="ZHB-mL-AGC" secondAttribute="leading" constant="15" id="jGU-mg-3fF"/>
                                                                                     <constraint firstItem="by5-AF-vhw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="pIr-vE-0HX" secondAttribute="trailing" constant="8" symbolic="YES" id="m7B-1a-hFA"/>
                                                                                     <constraint firstAttribute="trailing" secondItem="by5-AF-vhw" secondAttribute="trailing" constant="140" id="tIj-jW-Ims"/>
@@ -377,7 +380,7 @@
         <!--Auth View Controller-->
         <scene sceneID="Afs-iK-w8w">
             <objects>
-                <viewController id="rU5-Fn-HeF" customClass="AuthViewController" customModule="Tag" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="rU5-Fn-HeF" customClass="AuthViewController" customModule="TagCashier" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KpG-n5-mGZ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

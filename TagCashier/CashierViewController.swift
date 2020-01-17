@@ -11,14 +11,16 @@ import CoreNFC
 import Firebase
 
 // Globals
-let ref = Database.database().reference()
 
 // Variables
 var receipts = [Receipt]()
 var keyboardHeight:CGFloat = 0
+var storeName = ""
+var receiptItems = [Receipt.ReceiptItem]()
 
 // Constants
-let rowHeight = CGFloat(33)
+let ref = Database.database().reference()
+let rowHeight = CGFloat(35)
 
 class CashierViewController: UIViewController {
     
@@ -69,7 +71,7 @@ class CashierViewController: UIViewController {
         if Auth.auth().currentUser == nil {
             self.performSegue(withIdentifier: "presentAuth", sender: self)
         } else {
-            // TODO: set receipt title to store name
+            
         }
         
     }
@@ -98,11 +100,78 @@ class CashierViewController: UIViewController {
         // Other Init
         ReceiptCollectionView.dataSource = self
         ReceiptCollectionView.delegate = self
+        reloadPreview()
         
+    }
+    
+    func reloadPreview() {
+        receipts.removeAll()
+        var total:Double = 0
+        for item in receiptItems {
+            total += item.ItemSubTotal
+        }
+        total = round(total*100)/100
+        receipts.append(Receipt(StoreName: storeName, GrandTotal: total, Items: receiptItems))
+        ReceiptCollectionView.reloadData()
     }
     
     func presentAddMenu() {
         //TODO: Insert Item Add
+        let actionSheet = UIAlertController(title: "Manual Edit", message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(.init(title: "Edit Store Name", style: .default, handler: { (result) in
+            let alert = UIAlertController(title: "Edit Store Name", message: nil, preferredStyle: .alert)
+            alert.addTextField { (textfield) in
+                textfield.placeholder = "Enter new store name... "
+            }
+            alert.addAction(.init(title: "Save", style: .default, handler: { (result) in
+                if let textField = alert.textFields?[0] {
+                    storeName = textField.text ?? ""
+                    self.reloadPreview()
+                }
+            }))
+            alert.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }))
+        actionSheet.addAction(.init(title: "Add Item", style: .default, handler: { (result) in
+            let alert = UIAlertController(title: "Add Item", message: nil, preferredStyle: .alert)
+            alert.addTextField { (textfield) in
+                textfield.placeholder = "Enter item name... "
+            }
+            alert.addTextField { (textfield) in
+                textfield.placeholder = "Enter item price... "
+                textfield.keyboardType = .decimalPad
+            }
+            alert.addTextField { (textfield) in
+                textfield.placeholder = "Enter item quantity... "
+                textfield.keyboardType = .numberPad
+            }
+            alert.addAction(.init(title: "Save", style: .default, handler: { (result) in
+                if let textFields = alert.textFields {
+                    guard let newItemName = textFields[0].text else {
+                        return
+                    }
+                    guard let newItemPrice = Double(textFields[1].text!) else {
+                        return
+                    }
+                    let newItemPriceRounded = round(newItemPrice*100)/100
+                    guard let newItemQty = Int(textFields[2].text!) else {
+                        return
+                    }
+                    let subTotal = round(newItemPriceRounded * Double(newItemQty) * 100)/100
+                    receiptItems.append(Receipt.ReceiptItem(Name: newItemName, Qty: newItemQty, SubTotal: subTotal))
+                    self.reloadPreview()
+                }
+            }))
+            alert.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }))
+        actionSheet.addAction(.init(title: "Reset Receipt", style: .destructive, handler: { (result) in
+            storeName = ""
+            receiptItems = [Receipt.ReceiptItem]()
+            self.reloadPreview()
+        }))
+        actionSheet.addAction(.init(title: "Cancel", style: .cancel, handler: nil))
+        self.present(actionSheet, animated: true, completion: nil)
     }
     
     // Mark : Auth Functions
