@@ -24,35 +24,36 @@ class AuthViewController: UIViewController {
     
     @IBAction func pressedLogIn(_ sender: Any) {
         
-        if let email = EmailTextField.text {
-            if let password = PasswordTextField.text {
-                Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
-                    if error == nil {
-                        // No error, proceed
-                        Auth.auth().currentUser?.getIDTokenResult(completion: { (result, error) in
-                            if let role = result?.claims["role"] as? String {
-                                if role == "cashier" {
-                                    self.dismiss(animated: true, completion: nil)
-                                } else {
-                                    self.rejectLogInAttempt()
-                                }
-                            } else {
-                                self.rejectLogInAttempt()
-                            }
-                        })
-                    } else {
-                        if let errorCode = error?._code {
-                            if let authError = AuthErrorCode(rawValue: errorCode) {
-                                self.handleAuthError(error: authError)
-                            }
+        guard let email = EmailTextField.text else {
+            self.presentSimpleAlert(title: "No email", message: "Please enter a valid email address", btnMsg: "Ok")
+            return
+        }
+        guard let password = PasswordTextField.text else {
+            self.presentSimpleAlert(title: "No password", message: "Please enter your password", btnMsg: "Ok")
+            return
+        }
+        
+        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+            if error == nil {
+                // No error, proceed
+                Auth.auth().currentUser?.getIDTokenResult(completion: { (result, error) in
+                    if let role = result?.claims["role"] as? String {
+                        if role == "cashier" {
+                            self.dismiss(animated: true, completion: nil)
+                        } else {
+                            self.rejectLogInAttempt()
                         }
+                    } else {
+                        self.rejectLogInAttempt()
+                    }
+                })
+            } else {
+                if let errorCode = error?._code {
+                    if let authError = AuthErrorCode(rawValue: errorCode) {
+                        self.handleAuthError(error: authError)
                     }
                 }
-            } else {
-                // No password!
             }
-        } else {
-            // No email
         }
         
     }
