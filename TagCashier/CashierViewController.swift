@@ -65,15 +65,35 @@ class CashierViewController: UIViewController {
     }
     
     @IBAction func clickedScan(_ sender: Any) {
+        guard NFCNDEFReaderSession.readingAvailable else {
+            let alertController = UIAlertController(
+                title: "Scanning Not Supported",
+                message: "This device doesn't support tag scanning.",
+                preferredStyle: .alert
+            )
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+
+        let session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
+        session.alertMessage = "Looking for Tag card..."
+        session.begin()
     }
     
     @IBAction func unwindAfterSigningIn(segue: UIStoryboardSegue) {
         if Auth.auth().currentUser == nil {
             self.performSegue(withIdentifier: "presentAuth", sender: self)
         } else {
-            
+            Auth.auth().currentUser?.getIDTokenResult(completion: { (result, error) in
+                if let role:String = result?.claims["role"] as? String {
+                    if role != "cashier" {
+                        self.presentSimpleAlert(title: "Invalid credentials", message: "This terminal requires cashier access privileges", btnMsg: "Continue")
+                        self.performSegue(withIdentifier: "presentAuth", sender: self)
+                    }
+                }
+            })
         }
-        
     }
     
     // Mark : View State Functions
@@ -314,4 +334,103 @@ extension ReceiptCollectionViewCell: UITableViewDataSource {
         
     }
     
+}
+
+extension CashierViewController: NFCNDEFReaderSessionDelegate {
+    
+    func readerSessionDidBecomeActive(_ session: NFCNDEFReaderSession) {
+    }
+    
+    func readerSession(_ session: NFCNDEFReaderSession, didDetect tags: [NFCNDEFTag]) {
+        if tags.count > 1 {
+            // Restart polling in 500 milliseconds.
+            let retryInterval = DispatchTimeInterval.milliseconds(500)
+            session.alertMessage = "More than 1 tag is detected. Please remove all tags and try again."
+            DispatchQueue.global().asyncAfter(deadline: .now() + retryInterval, execute: {
+                session.restartPolling()
+            })
+            return
+        }
+        
+        func readTag(tag: NFCNDEFTag) {
+            tag.readNDEF(completionHandler: { (message: NFCNDEFMessage?, error: Error?) in
+                var statusMessage: String
+                if nil != error || nil == message {
+                    statusMessage = "Fail to read NDEF from tag"
+                } else {
+                    statusMessage = "Found 1 NDEF message"
+                    DispatchQueue.main.async {
+                        // Process detected NFCNDEFMessage objects.
+                        if message != nil {
+                            let records = message!.records
+                            let receiptData = records.first?.payload ?? Data()
+                            
+                            print(receiptData)
+                            // Should give me UID of user stored on card
+                        }
+                    }
+                }
+                
+                session.alertMessage = statusMessage
+                session.invalidate()
+            })
+        }
+        
+        // Connect to the found tag and write an NDEF message to it.
+        let tag = tags.first!
+        session.connect(to: tag, completionHandler: { (error: Error?) in
+            if nil != error {
+                session.alertMessage = "Unable to connect to tag."
+                session.invalidate()
+                return
+            }
+            
+            tag.queryNDEFStatus(completionHandler: { (ndefStatus: NFCNDEFStatus, capacity: Int, error: Error?) in
+                guard error == nil else {
+                    session.alertMessage = "Unable to query the NDEF status of tag."
+                    session.invalidate()
+                    return
+                }
+
+                switch ndefStatus {
+                case .notSupported:
+                    session.alertMessage = "Tag is not NDEF compliant."
+                    session.invalidate()
+                    
+                case .readOnly:
+                    session.alertMessage = "Tag is read only."
+                    readTag(tag: tag)
+                    
+                case .readWrite:
+                    session.alertMessage = "Reading Reciept..."
+                    readTag(tag: tag)
+                    
+                @unknown default:
+                    session.alertMessage = "Unknown NDEF tag status."
+                    session.invalidate()
+                }
+            })
+        })
+    }
+    
+    func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
+    }
+    
+    func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
+        // Check the invalidation reason from the returned error.
+        if let readerError = error as? NFCReaderError {
+            if (readerError.code != .readerSessionInvalidationErrorFirstNDEFTagRead)
+                && (readerError.code != .readerSessionInvalidationErrorUserCanceled) {
+                let alertController = UIAlertController(
+                    title: "Session Invalidated",
+                    message: error.localizedDescription,
+                    preferredStyle: .alert
+                )
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            }
+        }
+    }
 }

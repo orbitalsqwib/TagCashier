@@ -34,6 +34,7 @@
 		1C809AE723CEC038003B9FDC /* Classes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Classes.swift; sourceTree = "<group>"; };
 		1C809AE923CEC050003B9FDC /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		1C809AEB23CEC1BB003B9FDC /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		1CDE257323D15E4900AC18EE /* TagCashier.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TagCashier.entitlements; sourceTree = "<group>"; };
 		65095AC59F1FBAE5DF1136E3 /* Pods-TagCashier.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TagCashier.release.xcconfig"; path = "Target Support Files/Pods-TagCashier/Pods-TagCashier.release.xcconfig"; sourceTree = "<group>"; };
 		D9BC41FD88D58920FC132181 /* Pods_TagCashier.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TagCashier.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -71,6 +72,7 @@
 		1C809ACE23CEB667003B9FDC /* TagCashier */ = {
 			isa = PBXGroup;
 			children = (
+				1CDE257323D15E4900AC18EE /* TagCashier.entitlements */,
 				1C809ACF23CEB667003B9FDC /* AppDelegate.swift */,
 				1C809AD123CEB667003B9FDC /* SceneDelegate.swift */,
 				1C809AEB23CEC1BB003B9FDC /* AuthViewController.swift */,
@@ -369,6 +371,7 @@
 			baseConfigurationReference = 0BFEDE6C3A0A1CF3B881CCB8 /* Pods-TagCashier.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TagCashier/TagCashier.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7K6ZTDFM48;
 				INFOPLIST_FILE = TagCashier/Info.plist;
@@ -388,6 +391,7 @@
 			baseConfigurationReference = 65095AC59F1FBAE5DF1136E3 /* Pods-TagCashier.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TagCashier/TagCashier.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7K6ZTDFM48;
 				INFOPLIST_FILE = TagCashier/Info.plist;
