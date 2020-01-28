@@ -180,6 +180,7 @@ class CashierViewController: UIViewController {
                         return
                     }
                     let subTotal = round(newItemPriceRounded * Double(newItemQty) * 100)/100
+                    total += subTotal
                     receiptItems.append(Receipt.ReceiptItem(Name: newItemName, Qty: newItemQty, SubTotal: subTotal))
                     self.reloadPreview()
                 }
@@ -358,26 +359,59 @@ extension CashierViewController: NFCNDEFReaderSessionDelegate {
             tag.readNDEF(completionHandler: { (message: NFCNDEFMessage?, error: Error?) in
                 var statusMessage: String
                 if nil != error || nil == message {
-                    statusMessage = "Fail to read NDEF from tag"
+                    statusMessage = "rip in error pls try again."
                 } else {
-                    statusMessage = "Found 1 NDEF message"
+                    statusMessage = "Card Detected! Working..."
                     DispatchQueue.main.async {
                         // Process detected NFCNDEFMessage objects.
                         if message != nil {
                             let records = message!.records
-                            let receiptData = records.first?.payload ?? Data()
+                            
+                            guard let receiptData = records.first?.payload else {
+                                self.presentSimpleAlert(title: "Invalid card", message: "This card doesn't seem to be a Tag Membership Card! Try again?", btnMsg: "Continue")
+                                return
+                            }
                             
                             // Should give me UID of user stored on card
-                            let uid = String(decoding: receiptData, as: UTF8.self)
+                            let uid = String(String(decoding: receiptData, as: UTF8.self).dropFirst(1))
                             if uid != "" {
-                                let receiptRef = ref.child("users/"+uid).childByAutoId()
-                                receiptRef.updateChildValues(["store": storeName])
-                                receiptRef.updateChildValues(["total": total])
-                                for item in receiptItems {
-                                    let itemRef = receiptRef.child("items").childByAutoId()
-                                    itemRef.updateChildValues(["name" : item.ItemName])
-                                    itemRef.updateChildValues(["quantity" : item.ItemQty])
-                                    itemRef.updateChildValues(["price" : item.ItemSubTotal])
+                                Auth.auth().currentUser?.getIDTokenResult(completion: { (result, error) in
+                                    guard let cashierUID = Auth.auth().currentUser?.uid else {
+                                        self.presentSimpleAlert(title: "Not signed in?", message: "you find yourself in a mysterious space because you should be signed in but we don't detect that? ._. ... impossible...", btnMsg: "nani?!")
+                                        return
+                                    }
+                                    guard let companyID:String = result?.claims["company"] as? String else {
+                                        return
+                                    }
+                                    let path = "companies/"+companyID+"/cashiers/"+cashierUID+"/receipts"
+                                    let receiptRef = ref.child(path).childByAutoId()
+                                    receiptRef.updateChildValues(["store": storeName])
+                                    receiptRef.updateChildValues(["total": total])
+                                    for item in receiptItems {
+                                        let itemRef = receiptRef.child("items").childByAutoId()
+                                        itemRef.updateChildValues(["name" : item.ItemName])
+                                        itemRef.updateChildValues(["quantity" : item.ItemQty])
+                                        itemRef.updateChildValues(["price" : item.ItemSubTotal])
+                                    }
+                                    if error != nil {
+                                        return
+                                    }
+                                })
+                                ref.child("cards/"+uid).observeSingleEvent(of: .value) { (snapshot) in
+                                    guard let userID = snapshot.value as? String else {
+                                        print("no matching user")
+                                        return
+                                    }
+                                    
+                                    let receiptRef = ref.child("users/"+userID+"/receipts").childByAutoId()
+                                    receiptRef.updateChildValues(["store": storeName])
+                                    receiptRef.updateChildValues(["total": total])
+                                    for item in receiptItems {
+                                        let itemRef = receiptRef.child("items").childByAutoId()
+                                        itemRef.updateChildValues(["name" : item.ItemName])
+                                        itemRef.updateChildValues(["quantity" : item.ItemQty])
+                                        itemRef.updateChildValues(["price" : item.ItemSubTotal])
+                                    }
                                 }
                             }
                         }
